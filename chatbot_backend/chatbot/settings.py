@@ -38,7 +38,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'chatbot_dibas_app',
-    'rest_framework'
+    'rest_framework', 
+        'corsheaders'
+]
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    
 ]
 
 MIDDLEWARE = [
@@ -49,6 +54,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+        'corsheaders.middleware.CorsMiddleware',
+
 ]
 
 ROOT_URLCONF = "chatbot.urls"
