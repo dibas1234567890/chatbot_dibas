@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*.sqlite3
+env/
+venv/
+*.env
+node_modules/
+npm-debug.log
+build/
+.env
+.DS_Store
