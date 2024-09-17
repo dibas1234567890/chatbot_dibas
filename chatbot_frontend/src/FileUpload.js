@@ -50,9 +50,16 @@ function FileUpload() {
   };
 
   return (
-    <div>
-      <input type="file" onChange={onFileChange} />
-      <button onClick={onFileUpload}>
+    <div className="card">
+      <div className='card'>
+        <div className='card-body'>        <input type="file" onChange={onFileChange} />
+        
+        <div className='card-title'>Upload Multiple PDFs</div>
+        </div>
+       
+
+      </div>
+      <button className='btn btn-info text-white' onClick={onFileUpload}>
         Upload!
       </button>
     </div>
