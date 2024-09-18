@@ -25,7 +25,7 @@ function ChatBox() {
     const newMessage = { type: 'user', text: question };
     setMessages([...messages, newMessage]);
 
-    axios.post('http://localhost:8000/api/question/', { session_id: sessionId.current, question })
+    axios.post('https://dibaspratapbasnet.com.np/chatbot_final/api/question/', { session_id: sessionId.current, question })
       .then(response => {
         const botMessage = { type: 'bot', text: response.data.answer };
         setMessages([...messages, newMessage, botMessage]);

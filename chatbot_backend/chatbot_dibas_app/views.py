@@ -160,3 +160,8 @@ class AppointmentView(APIView):
             serializer.save()
             return Response({'message': 'Appointment booked successfully!'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+from django.views.generic import View
+from django.http import HttpResponse
+from django.conf import settings
+import os 
+

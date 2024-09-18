@@ -34,7 +34,7 @@ function FileUpload() {
     const formData = new FormData();
     formData.append('pdfs', file);
 
-    axios.post('http://localhost:8000/api/upload_pdf/', formData, {
+    axios.post('https://dibaspratapbasnet.com.np/chatbot_final/api/upload_pdf/', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'X-CSRFToken': getCookie('csrftoken'),
