@@ -12,6 +12,7 @@ from langchain.prompts import PromptTemplate
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
+from dateparser import parse as dateparse  
 from .serializers import AppointmentSerializer
 
 load_dotenv()
@@ -64,8 +65,6 @@ class UploadPDFView(APIView):
             return Response({"message": "PDF processed and embeddings saved successfully."}, status=status.HTTP_200_OK)
         return Response({"error": "Failed to process PDF."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-from datetime import datetime
-
 class QuestionAnswerView(APIView):
     def post(self, request):
         session_id = request.data.get('session_id')
@@ -112,12 +111,16 @@ class QuestionAnswerView(APIView):
         elif session_data['step'] == 'ask_date':
             if not session_data['date']:
                 try:
-                    session_data['date'] = datetime.strptime(user_question, '%Y-%m-%d').date()
-                    session_data['step'] = 'complete'
-                    return Response({
-                        'answer': f"Thank you, {session_data['name']}! Your appointment is set for {session_data['date']}. We'll contact you at {session_data['phone']}.",
-                        'contact_info': session_data
-                    })
+                    parsed_date = dateparse(user_question)
+                    if parsed_date:
+                        session_data['date'] = parsed_date.date()
+                        session_data['step'] = 'complete'
+                        return Response({
+                            'answer': f"Thank you, {session_data['name']}! Your appointment is set for {session_data['date']}. We'll contact you at {session_data['phone']}.",
+                            'contact_info': session_data
+                        })
+                    else:
+                        return Response({'answer': "The date format is incorrect or not recognized. Please try again."})
                 except ValueError:
                     return Response({'answer': "The date format is incorrect. Please use YYYY-MM-DD."})
             elif 'change date' in user_question.lower():
@@ -152,7 +155,7 @@ class QuestionAnswerView(APIView):
 
         except Exception as e:
             return Response({'error': 'An error occurred while processing your request.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-#For this chatbot, the serializer is optional but it converts inputs to JSON which can be integrated to other tools 
+
 class AppointmentView(APIView):
     def post(self, request):
         serializer = AppointmentSerializer(data=request.data)
@@ -160,8 +163,3 @@ class AppointmentView(APIView):
             serializer.save()
             return Response({'message': 'Appointment booked successfully!'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-from django.views.generic import View
-from django.http import HttpResponse
-from django.conf import settings
-import os 
-
